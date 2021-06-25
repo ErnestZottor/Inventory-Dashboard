@@ -7,10 +7,11 @@ const actionIcon = document.getElementsByClassName("icon");
 const overViewBoxes = document.querySelector(".overview-boxes");
 const deleteIcon = document.getElementsByClassName("bx-trash");
 const tableIndex = document.getElementsByClassName("prod-index");
+const notificationDiv = document.querySelector(".toast");
+
 let ind = 0;
 
 const init = () => {
-  // console.log(actionIcon);
   sidebarBtn.onclick = function () {
     sidebar.classList.toggle("active");
     if (sidebar.classList.contains("active")) {
@@ -21,6 +22,8 @@ const init = () => {
   DashboardUI.showTotalItems();
   DashboardUI.showTotalCategory();
   DashboardUI.displayLabelColor();
+  DashboardUI.showTotalQuantity();
+  DashboardUI.displayItemsInAndOutOfStock();
   removeItem.addEventListener("click", () => {
     DashboardUI.showDeleteTable();
     let deleteIconArray = [...deleteIcon];
@@ -43,7 +46,6 @@ class DashboardUI {
   }
 
   static PopulateRows(product) {
-    //const id=0
     const list = document.getElementsByClassName("product-list")[0];
     list.innerHTML += `<tr>
         <td class= "prod-index">${product.id}</td>
@@ -68,6 +70,39 @@ class DashboardUI {
         summaryInputs[0].innerHTML = prod.id;
       });
     } else summaryInputs[0].innerHTML = 0;
+  }
+
+  static showTotalQuantity() {
+    let storedProducts = Storage.getProducts();
+    let products = [...storedProducts];
+    let counter = 0;
+    if (products.length !== 0) {
+      products.forEach((prod) => {
+        counter += parseInt(prod.quantity);
+      });
+      summaryInputs[2].innerHTML = counter;
+    } else summaryInputs[2].innerHTML = 0;
+  }
+
+  static displayItemsInAndOutOfStock() {
+    let storedProducts = Storage.getProducts();
+    let products = [...storedProducts];
+    let count1 = 0;
+    let count2 = 0;
+    if (products.length !== 0) {
+      products.forEach((prod) => {
+        if (parseInt(prod.quantity) == 0) {
+          count1++;
+        } else {
+          count2++;
+        }
+      });
+      summaryInputs[3].innerHTML = count2;
+      summaryInputs[4].innerHTML = count1;
+    } else {
+      summaryInputs[3].innerHTML = 0;
+      summaryInputs[4].innerHTML = 0;
+    }
   }
 
   static showTotalCategory() {
@@ -100,6 +135,7 @@ class DashboardUI {
     let id = buttonClicked.closest("tr").rowIndex;
 
     buttonClicked.closest("tr").remove();
+    DashboardUI.showMessage("Product deleted", "error");
     DashboardUI.updateLocalStorage(id);
   }
 
@@ -132,6 +168,23 @@ class DashboardUI {
     actionIconArray.forEach((icon) => {
       icon.classList = "bx bx-trash icon";
     });
+  }
+
+  static showMessage(message, state) {
+    let hideTimeout = null;
+
+    clearTimeout(hideTimeout);
+
+    notificationDiv.textContent = message;
+    notificationDiv.className = "toast toast--visible";
+
+    if (state) {
+      notificationDiv.classList.add(`toast--${state}`);
+    }
+
+    hideTimeout = setTimeout(() => {
+      notificationDiv.classList.remove("toast--visible");
+    }, 3000);
   }
 }
 

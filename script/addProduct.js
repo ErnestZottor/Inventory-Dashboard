@@ -4,6 +4,8 @@ const inputFields = document.querySelectorAll(".form__field");
 const addBtn = document.querySelector(".add-btn");
 const form = document.getElementsByClassName("inventory-inputs")[0];
 const deleteBtn = document.getElementsByClassName("danger-btn");
+const notificationDiv = document.querySelector(".toast");
+
 let id = 1;
 
 const init = () => {
@@ -33,6 +35,7 @@ const init = () => {
     Storage.saveProducts(product);
     // UI.handleDeletion();
     UI.PopulateRows(product);
+    UI.showMessage("product added successfully", "success");
   });
 };
 
@@ -55,34 +58,22 @@ class UI {
     </tr>
     `;
   }
+  static showMessage(message, state) {
+    let hideTimeout = null;
 
-  // static deleteItem(event) {
-  //   let buttonClicked = event.target;
-  //   let id = buttonClicked.closest("tr").rowIndex;
+    clearTimeout(hideTimeout);
 
-  //   buttonClicked.closest("tr").remove();
-  //   UI.updateLocalStorage(id);
-  // }
+    notificationDiv.textContent = message;
+    notificationDiv.className = "toast toast--visible";
 
-  // static updateLocalStorage(id) {
-  //   let productsFromLocalStorage = Storage.getProducts();
-  //   let idBeforeDeletedItem = id - 1;
-  //   productsFromLocalStorage.forEach((product) => {
-  //     if (id == product.id) {
-  //       productsFromLocalStorage.splice(id - 1, 1);
-  //       productsFromLocalStorage.forEach((prod) => {
-  //         if (prod.id > idBeforeDeletedItem) {
-  //           prod.id = idBeforeDeletedItem += 1;
-  //         }
-  //       });
-  //       localStorage.setItem(
-  //         "products",
-  //         JSON.stringify(productsFromLocalStorage)
-  //       );
-  //     }
-  //   });
-  //   location.reload();
-  // }
+    if (state) {
+      notificationDiv.classList.add(`toast--${state}`);
+    }
+
+    hideTimeout = setTimeout(() => {
+      notificationDiv.classList.remove("toast--visible");
+    }, 3000);
+  }
 }
 
 class Products {

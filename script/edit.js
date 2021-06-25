@@ -1,5 +1,7 @@
 const inputFields = document.querySelectorAll(".form__field");
 const form = document.getElementsByClassName("inventory-inputs")[0];
+const notificationDiv = document.querySelector(".toast");
+const tableRows = document.getElementsByClassName("tb-rows");
 
 let index = -1;
 let newVal = {};
@@ -7,10 +9,10 @@ let newVal = {};
 const init = () => {
   displayProducts();
   updateField();
-  //   updateStock();
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     updateStock();
+    showMessage("product updated successfully", "success");
   });
 };
 
@@ -31,12 +33,24 @@ const updateField = () => {
 
 const updateStock = () => {
   let productsFromLocalStorage = Storage.getProducts();
-
+  let tbRow = [...tableRows];
   const name = inputFields[1].value.trim();
   const description = inputFields[2].value.trim();
   const category = inputFields[3].value.trim();
   const quantity = inputFields[4].value.trim();
   const id = parseInt(inputFields[0].value);
+  tbRow.forEach((row, tableIndex) => {
+    if (tableIndex == id - 1) {
+      tbRow[id - 1].innerHTML = `
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${description}</td>
+        <td>${category}</td>
+        <td>${quantity}</td>
+    
+    `;
+    }
+  });
 
   productsFromLocalStorage.forEach((product) => {
     if (id == product.id) {
@@ -51,28 +65,43 @@ const updateStock = () => {
       );
     }
   });
-  location.reload();
 };
 
 const displayProducts = () => {
   const storedProducts = Storage.getProducts();
-  // const products = storedProducts;
   storedProducts.forEach((product) => PopulateRows(product));
 };
 
 const PopulateRows = (product) => {
-  //const id=0
   const list = document.getElementsByClassName("product-list")[0];
-  list.innerHTML += `<tr>
+  list.innerHTML += `<tr class="tb-rows">
         <td>${product.id}</td>
         <td>${product.name}</td>
         <td>${product.description}</td>
         <td>${product.category}</td>
-        <td>${product.quantity}</td>
+        <td >${product.quantity}</td>
     </tr>
     `;
 };
 
+const showMessage = (message, state) => {
+  let hideTimeout = null;
+
+  clearTimeout(hideTimeout);
+
+  notificationDiv.textContent = message;
+  notificationDiv.className = "toast toast--visible";
+
+  if (state) {
+    notificationDiv.classList.add(`toast--${state}`);
+  }
+
+  hideTimeout = setTimeout(() => {
+    notificationDiv.classList.remove("toast--visible");
+  }, 3000);
+};
+
+// ------------------------------------------Storage Class------------------------------------------------
 class Storage {
   static getProducts() {
     let products = "";
@@ -94,14 +123,3 @@ class Storage {
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
-
-//------------------------------------ updateStock    ----------------------------------------
-//   let newVall = {
-//     name: name,
-//     description: description,
-//     category: category,
-//     quantity: quantity,
-//     id: id,
-//   };
-
-//   productsFromLocalStorage.splice(id - 1, 1, newVall);
