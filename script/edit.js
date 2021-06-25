@@ -5,8 +5,11 @@ let index = -1;
 let newVal = {};
 
 const init = () => {
+  displayProducts();
   updateField();
-  document.querySelector(".update").addEventListener("click", (e) => {
+  //   updateStock();
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
     updateStock();
   });
 };
@@ -18,9 +21,9 @@ const updateField = () => {
       if (inputFields[0].value == item.id) {
         inputFields[1].value = item.name;
         // inputFields[1].readOnly = true;
-        inputFields[2].value = item.quantity;
+        inputFields[2].value = item.description;
         inputFields[3].value = item.category;
-        inputFields[4].value = item.description;
+        inputFields[4].value = item.quantity;
       }
     });
   });
@@ -30,9 +33,9 @@ const updateStock = () => {
   let productsFromLocalStorage = Storage.getProducts();
 
   const name = inputFields[1].value.trim();
-  const description = inputFields[4].value.trim();
+  const description = inputFields[2].value.trim();
   const category = inputFields[3].value.trim();
-  const quantity = inputFields[2].value.trim();
+  const quantity = inputFields[4].value.trim();
   const id = parseInt(inputFields[0].value);
 
   productsFromLocalStorage.forEach((product) => {
@@ -41,13 +44,33 @@ const updateStock = () => {
       let productQty = product.quantity;
       product.description = description;
       product.category = category;
-      product.quantity = parseInt(quantity) + parseInt(productQty);
+      product.quantity = quantity;
       localStorage.setItem(
         "products",
         JSON.stringify(productsFromLocalStorage)
       );
     }
   });
+  location.reload();
+};
+
+const displayProducts = () => {
+  const storedProducts = Storage.getProducts();
+  // const products = storedProducts;
+  storedProducts.forEach((product) => PopulateRows(product));
+};
+
+const PopulateRows = (product) => {
+  //const id=0
+  const list = document.getElementsByClassName("product-list")[0];
+  list.innerHTML += `<tr>
+        <td>${product.id}</td>
+        <td>${product.name}</td>
+        <td>${product.description}</td>
+        <td>${product.category}</td>
+        <td>${product.quantity}</td>
+    </tr>
+    `;
 };
 
 class Storage {

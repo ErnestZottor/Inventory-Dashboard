@@ -2,21 +2,14 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>Dash</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/dash.css" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/edit.css" />
     <!-- <link rel="stylesheet" href="styles.css" /> -->
     <link
       href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
-      crossorigin="anonymous"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
     <div class="sidebar">
@@ -44,17 +37,17 @@
           </a>
         </li>
         <li>
-          <a href="edit.html">
+          <a href="#">
             <i class="bx bx-pie-chart-alt-2"></i>
             <span class="links_name">Update Details</span>
           </a>
         </li>
-        <li class="remove-product">
+        <!-- <li>
           <a href="#">
-            <i class="bx bx-trash"></i>
+            <i class="bx bx-coin-stack"></i>
             <span class="links_name">Remove Product</span>
           </a>
-        </li>
+        </li> -->
         <li>
           <a href="#">
             <i class="bx bx-book-alt"></i>
@@ -71,10 +64,10 @@
       </ul>
     </div>
     <section class="home-section">
-      <nav>
+      <nav class="edit-nav">
         <div class="sidebar-button">
           <i class="bx bx-menu sidebarBtn"></i>
-          <span class="dashboard">Dashboard</span>
+          <span class="dashboard">Edit Page</span>
         </div>
         <div class="search-box">
           <!-- <input type="text" placeholder="Search..." />
@@ -82,45 +75,74 @@
         </div>
         <div class="profile-details">
           <img src="img/honey.jpg" alt="" />
-          <span class="admin_name">Ernesto</span>
+          <span class="admin_name">Badger</span>
           <i class="bx bx-chevron-down"></i>
         </div>
       </nav>
 
       <div class="home-content">
-        <div class="overview-boxes">
-          <div class="box">
-            <div class="right-side">
-              <div class="box-topic">Total Products</div>
-              <div class="number"></div>
+         <div class="container">
+      <div class="frame">
+        <!-- <div class="nav">
+          <ul class="links">
+            <li class="signin-active"><a class="btn">Add Product</a></li>
+          </ul>
+        </div> -->
+        <div>
+          <form class="inventory-inputs" >
+            <div class="id-div">
+              <label class="id-label" for="username">Enter Product ID Here</label>
+              <input
+                class="form__field"
+                type="text"
+                name="prodId"
+                placeholder=""
+                required
+              /></div>
+            <div class="flex flex1">
+              <label for="username">Name</label>
+              <input
+                class="form__field"
+                type="text"
+                name="username"
+                placeholder=""
+                required
+              />
+              <label for="description">Description</label>
+              <input
+                class="form__field"
+                type="text"
+                name="description"
+                placeholder=""
+                required
+              />
             </div>
-          </div>
-          <div class="box">
-            <div class="right-side">
-              <div class="box-topic">Total Categories</div>
-              <div class="number"></div>
+            <div class="flex flex2">
+              <label for="category">Category</label>
+              <input
+                class="form__field"
+                type="text"
+                name="category"
+                placeholder=""
+                required
+              />
+              <label for="quantity">Quantity</label>
+              <input
+                class="form__field"
+                type="number"
+                name="quantity"
+                placeholder=""
+                required
+              />
             </div>
-          </div>
-          <div class="box">
-            <div class="right-side">
-              <div class="box-topic">Items in stock</div>
-              <div class="number">5</div>
-            </div>
-          </div>
-          <div class="box">
-            <div class="right-side">
-              <div class="box-topic">Almost finished</div>
-              <div class="number">1</div>
-            </div>
-          </div>
-          <div class="box">
-            <div class="right-side">
-              <div class="box-topic">out of stock</div>
-              <div class="number">2</div>
-            </div>
-          </div>
+            <div class="submit-div"><input type="submit" id="submit" value="Update Product" /></div>
+          </form>
         </div>
-        <div class="table-wrapper show-danger-btn">
+      </div>
+    </div>
+        </div> 
+      </div>
+        <div class="table-wrapper">
           <table class="fl-table">
             <thead>
               <tr>
@@ -137,7 +159,6 @@
       </div>
     </section>
     <!-- <script src="index.js"></script> -->
-    <!-- <script src="script.js"></script> -->
-    <script src="script/dash.js"></script>
+    <script src="script/edit.js"></script>
   </body>
 </html>
