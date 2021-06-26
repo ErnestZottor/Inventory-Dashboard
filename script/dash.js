@@ -13,6 +13,7 @@ const backDrop = document.querySelector(".backdrop");
 const quantityUpdate = document.querySelector(".quantity-update");
 const inputFields = document.querySelectorAll(".text-field");
 const formBtn = document.querySelector(".modal form");
+const closeModalBtn = document.querySelector(".exit");
 
 let ind = 0;
 
@@ -47,6 +48,9 @@ const init = () => {
     e.preventDefault();
     DashboardUI.updateStock();
     DashboardUI.showMessage("quantity updated successfully", "success");
+    DashboardUI.removeOverly();
+  });
+  closeModalBtn.addEventListener("click", () => {
     DashboardUI.removeOverly();
   });
 };
