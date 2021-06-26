@@ -6,7 +6,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/dash.css" />
-    <!-- <link rel="stylesheet" href="styles.css" /> -->
     <link
       href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
@@ -19,6 +18,46 @@
     />
   </head>
   <body>
+    <div class="backdrop"></div>
+    <div class="modal">
+      <div class="form-wrapperr">
+        <form class="hidden" action="" name="form">
+          <div class="id-divv">
+            <label class="id-label" for="username">Enter Product ID Here</label>
+            <input
+              class="form-stylin text-field"
+              type="text"
+              name="ProdId"
+              placeholder="Enter the item ID eg.1"
+            />
+          </div>
+          <div class="flexx">
+            <label for="username">Product Name</label>
+            <input
+              class="form-stylin text-field"
+              type="text"
+              name="Product Name"
+              placeholder=""
+            />
+          </div>
+          <div class="flexx">
+            <label for="username">Quantity</label>
+            <input
+              class="form-stylin text-field"
+              type="text"
+              name="quantity"
+              placeholder=""
+            />
+          </div>
+          <div class="submit-divv">
+            <input type="submit" id="submit" value="Update" />
+            <input type="button" value="Close" class="exit" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ---------------------------------------------------------- -->
     <div class="sidebar">
       <div class="logo-details">
         <i class="bx bxl-c-plus-plus"></i>
@@ -37,7 +76,7 @@
             <span class="links_name">Add Product</span>
           </a>
         </li>
-        <li>
+        <li class="quantity-update">
           <a href="#">
             <i class="bx bx-list-ul"></i>
             <span class="links_name">Update Quantity</span>
@@ -76,10 +115,7 @@
           <i class="bx bx-menu sidebarBtn"></i>
           <span class="dashboard">Dashboard</span>
         </div>
-        <div class="search-box">
-          <!-- <input type="text" placeholder="Search..." />
-          <i class="bx bx-search"></i> -->
-        </div>
+        <div class="search-box"></div>
         <div class="profile-details">
           <img src="img/honey.jpg" alt="" />
           <span class="admin_name">Ernesto</span>
@@ -137,8 +173,7 @@
       </div>
     </section>
     <div class="toast"></div>
-    <!-- <script src="index.js"></script> -->
-    <!-- <script src="script.js"></script> -->
+
     <script src="script/dash.js"></script>
   </body>
 </html>

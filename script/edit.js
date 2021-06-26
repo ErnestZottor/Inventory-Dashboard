@@ -2,7 +2,7 @@ const inputFields = document.querySelectorAll(".form__field");
 const form = document.getElementsByClassName("inventory-inputs")[0];
 const notificationDiv = document.querySelector(".toast");
 const tableRows = document.getElementsByClassName("tb-rows");
-
+const submitBtn = document.querySelector("#submit");
 let index = -1;
 let newVal = {};
 
@@ -17,23 +17,50 @@ const init = () => {
 };
 
 const updateField = () => {
+  let itemsFromLocalStorage = Storage.getProducts();
+  let lastProduct =
+    itemsFromLocalStorage.slice(-1)[0]; /*slice always returns an array */
   inputFields[0].addEventListener("input", () => {
-    let itemsFromLocalStorage = Storage.getProducts();
-    itemsFromLocalStorage.forEach((item) => {
-      if (inputFields[0].value == item.id) {
-        inputFields[1].value = item.name;
-        // inputFields[1].readOnly = true;
-        inputFields[2].value = item.description;
-        inputFields[3].value = item.category;
-        inputFields[4].value = item.quantity;
+    if (
+      parseInt(inputFields[0].value) > 0 &&
+      parseInt(inputFields[0].value) <= parseInt(lastProduct.id)
+    ) {
+      itemsFromLocalStorage.forEach((item) => {
+        if (inputFields[0].value == item.id) {
+          inputFields[1].value = item.name;
+          inputFields[2].value = item.description;
+          inputFields[3].value = item.category;
+          inputFields[4].value = item.quantity;
+        }
+      });
+    } else {
+      if (inputFields[0].value == 0) {
+        showMessage("Enter a Valid ID", "error");
+        inputFields[0].value = "";
+      } else {
+        inputFields[0].value = lastProduct.id;
+        showMessage(
+          `${lastProduct.id}` + " is the last product in stock",
+          "error"
+        );
+        clearInputFields();
       }
-    });
+    }
   });
+  // clearInputFields();
 };
 
+const clearInputFields = () => {
+  inputFields[1].value = "";
+  inputFields[2].value = "";
+  inputFields[3].value = "";
+  inputFields[4].value = "";
+  inputFields[0].value = "";
+};
 const updateStock = () => {
   let productsFromLocalStorage = Storage.getProducts();
   let tbRow = [...tableRows];
+
   const name = inputFields[1].value.trim();
   const description = inputFields[2].value.trim();
   const category = inputFields[3].value.trim();
@@ -41,7 +68,7 @@ const updateStock = () => {
   const id = parseInt(inputFields[0].value);
   tbRow.forEach((row, tableIndex) => {
     if (tableIndex == id - 1) {
-      tbRow[id - 1].innerHTML = `
+      row.innerHTML = `
         <td>${id}</td>
         <td>${name}</td>
         <td>${description}</td>
@@ -51,11 +78,9 @@ const updateStock = () => {
     `;
     }
   });
-
   productsFromLocalStorage.forEach((product) => {
     if (id == product.id) {
       product.name = name;
-      let productQty = product.quantity;
       product.description = description;
       product.category = category;
       product.quantity = quantity;
@@ -65,6 +90,7 @@ const updateStock = () => {
       );
     }
   });
+  clearInputFields();
 };
 
 const displayProducts = () => {
