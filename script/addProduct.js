@@ -3,8 +3,13 @@ let sidebarBtn = document.querySelector(".sidebarBtn");
 const inputFields = document.querySelectorAll(".form__field");
 const addBtn = document.querySelector(".add-btn");
 const form = document.getElementsByClassName("inventory-inputs")[0];
-const deleteBtn = document.getElementsByClassName("danger-btn");
 const notificationDiv = document.querySelector(".toast");
+const quantUpdate = document.querySelector(".hidden");
+const overlayInputFields = document.getElementsByClassName("text-field");
+const backDrop = document.querySelector(".backdrop");
+const quantityUpdate = document.querySelector(".quantity-update");
+const modal = document.querySelector(".modal");
+const closeModalBtn = document.querySelector(".exit");
 
 let id = 1;
 
@@ -33,9 +38,25 @@ const init = () => {
     );
 
     Storage.saveProducts(product);
-    // UI.handleDeletion();
     UI.PopulateRows(product);
+    UI.clearInputFields();
     UI.showMessage("product added successfully", "success");
+  });
+
+  quantityUpdate.addEventListener("click", () => {
+    UI.show();
+    UI.updateField();
+  });
+  quantUpdate.addEventListener("submit", (e) => {
+    e.preventDefault();
+    UI.updateStock();
+    UI.showMessage("quantity updated successfully", "success");
+    UI.removeOverly();
+    UI.clearQtyFields();
+  });
+  closeModalBtn.addEventListener("click", () => {
+    UI.removeOverly();
+    UI.clearQtyFields();
   });
 };
 
@@ -54,10 +75,17 @@ class UI {
         <td>${product.name}</td>
         <td>${product.description}</td>
         <td>${product.category}</td>
-        <td>${product.quantity}</td>
+        <td class="qty-data">${product.quantity}</td>
     </tr>
     `;
   }
+  static clearInputFields = () => {
+    inputFields[1].value = "";
+    inputFields[2].value = "";
+    inputFields[3].value = "";
+    inputFields[0].value = "";
+  };
+
   static showMessage(message, state) {
     let hideTimeout = null;
 
@@ -74,6 +102,77 @@ class UI {
       notificationDiv.classList.remove("toast--visible");
     }, 3000);
   }
+  static updateField = () => {
+    let itemsFromLocalStorage = Storage.getProducts();
+    let idField = overlayInputFields[0];
+    let lastProduct =
+      itemsFromLocalStorage.slice(-1)[0]; /*slice always returns an array */
+    idField.addEventListener("input", () => {
+      if (
+        parseInt(idField.value) > 0 &&
+        parseInt(idField.value) <= parseInt(lastProduct.id)
+      ) {
+        itemsFromLocalStorage.forEach((item) => {
+          if (idField.value == item.id) {
+            overlayInputFields[1].value = item.name;
+            overlayInputFields[1].readOnly = true;
+            overlayInputFields[2].value = item.quantity;
+          }
+        });
+      } else {
+        if (idField.value == 0) {
+          this.showMessage("Enter a Valid ID", "error");
+          idField.value = "";
+          this.clearQtyFields();
+        } else {
+          idField.value = lastProduct.id;
+          this.clearQtyFields();
+
+          this.showMessage(
+            `${lastProduct.id}` + " is the last product in stock",
+            "error"
+          );
+        }
+      }
+    });
+  };
+
+  static clearQtyFields = () => {
+    overlayInputFields[0].value = "";
+    overlayInputFields[1].value = "";
+
+    overlayInputFields[2].value = "";
+  };
+  static updateStock = () => {
+    let productsFromLocalStorage = Storage.getProducts();
+    const id = parseInt(overlayInputFields[0].value);
+    const quantity = overlayInputFields[2].value.trim();
+    let quantCells = Array.from(document.getElementsByClassName("qty-data"));
+    quantCells.forEach((cell) => {
+      let parentIndex = cell.closest("tr").rowIndex;
+      if (id === parentIndex) {
+        cell.innerHTML = quantity;
+      }
+    });
+    productsFromLocalStorage.forEach((product) => {
+      if (id == product.id) {
+        product.quantity = quantity;
+        localStorage.setItem(
+          "products",
+          JSON.stringify(productsFromLocalStorage)
+        );
+      }
+    });
+  };
+
+  static show = () => {
+    modal.classList.add("show");
+    backDrop.classList.add("show-backdrop");
+  };
+  static removeOverly = () => {
+    modal.classList.remove("show");
+    backDrop.classList.remove("show-backdrop");
+  };
 }
 
 class Products {

@@ -49,9 +49,11 @@ const init = () => {
     DashboardUI.updateStock();
     DashboardUI.showMessage("quantity updated successfully", "success");
     DashboardUI.removeOverly();
+    DashboardUI.clearInputFields();
   });
   closeModalBtn.addEventListener("click", () => {
     DashboardUI.removeOverly();
+    DashboardUI.clearInputFields();
   });
 };
 
@@ -230,13 +232,15 @@ class DashboardUI {
         if (inputFields[0].value == 0) {
           this.showMessage("Enter a Valid ID", "error");
           inputFields[0].value = "";
+          this.clearInputFields();
         } else {
           inputFields[0].value = lastProduct.id;
+          this.clearInputFields();
+
           this.showMessage(
             `${lastProduct.id}` + " is the last product in stock",
             "error"
           );
-          this.clearInputFields();
         }
       }
     });

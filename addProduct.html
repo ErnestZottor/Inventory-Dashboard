@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Add Product</title>
     <link rel="stylesheet" href="css/addProduct.css" />
-    <!-- <link rel="stylesheet" href="styles.css" /> -->
     <link
       href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
@@ -12,7 +11,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-       <div id="backdrop"></div>
+    <div class="backdrop"></div>
+    <div class="modal">
+      <div class="form-wrapperr">
+        <form class="hidden" action="" name="form">
+          <div class="id-divv">
+            <label class="id-label" for="username">Enter Product ID Here</label>
+            <input
+              class="form-stylin text-field"
+              type="number"
+              name="ProdId"
+              placeholder="Enter the item ID eg.1"
+              required
+            />
+          </div>
+          <div class="flexx">
+            <label for="username">Product Name</label>
+            <input
+              class="form-stylin text-field"
+              type="text"
+              name="Product Name"
+              placeholder=""
+              required
+            />
+          </div>
+          <div class="flexx">
+            <label for="username">Quantity</label>
+            <input
+              class="form-stylin text-field"
+              type="text"
+              name="quantity"
+              placeholder=""
+              required
+            />
+          </div>
+          <div class="submit-divv">
+            <input type="submit" id="submit" value="Update" />
+            <input type="button" value="Close" class="exit" />
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="sidebar">
       <div class="logo-details">
         <i class="bx bxl-c-plus-plus"></i>
@@ -31,8 +70,8 @@
             <span class="links_name">Add Product</span>
           </a>
         </li>
-        <li>
-          <a href="">
+        <li class="quantity-update">
+          <a href="#">
             <i class="bx bx-list-ul"></i>
             <span class="links_name">Update Quantity</span>
           </a>
@@ -66,8 +105,7 @@
           <span class="dashboard">Product Page</span>
         </div>
         <div class="search-box">
-          <!-- <input type="text" placeholder="Search..." />
-          <i class="bx bx-search"></i> -->
+          
         </div>
         <div class="profile-details">
           <img src="img/honey.jpg" alt="" />
@@ -79,11 +117,7 @@
       <div class="home-content">
          <div class="container">
       <div class="frame">
-        <!-- <div class="nav">
-          <ul class="links">
-            <li class="signin-active"><a class="btn">Add Product</a></li>
-          </ul>
-        </div> -->
+        
         <div>
           <form class="inventory-inputs" >
             <h3 class="item-header">Add item to stock</h3>
@@ -130,30 +164,6 @@
     </div>
         </div> 
       </div>
-      <!-- --------------------------------------------------------------------------------- -->
-    <!-- <div class="modal" id="add-modal">
-      <div class="modal__content">
-        <label for="title">Movie Title</label>
-        <input type="text" name="title" id="title" />
-        <label for="image-url">Image URL</label>
-        <input type="text" name="image-url" id="image-url" />
-        <label for="rating">Your Rating</label>
-        <input
-          type="number"
-          step="1"
-          max="5"
-          min="1"
-          name="rating"
-          id="rating"
-        />
-      </div>
-      <div class="modal__actions">
-        <button class="btn btn--passive">Cancel</button>
-        <button class="btn btn--success">Add</button>
-      </div>
-    </div> -->
-    <!-- --------------------------------------------------------------------------------------->
-      <!-- <div class="trial">Hello world</div> -->
         <div class="table-wrapper">
           <table class="fl-table">
             <thead>
@@ -163,7 +173,6 @@
                 <th>Description</th>
                 <th>Category</th>
                 <th>Quantity</th>
-                <!-- <th>Action</th> -->
               </tr>
             </thead>
             <tbody class="product-list"></tbody>
@@ -174,6 +183,5 @@
        <div class="toast"></div>
 
     <script src="script/addProduct.js"></script>
-    <!-- <script src="app.css"></script> -->
   </body>
 </html>

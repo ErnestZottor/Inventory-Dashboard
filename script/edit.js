@@ -3,8 +3,12 @@ const form = document.getElementsByClassName("inventory-inputs")[0];
 const notificationDiv = document.querySelector(".toast");
 const tableRows = document.getElementsByClassName("tb-rows");
 const submitBtn = document.querySelector("#submit");
-let index = -1;
-let newVal = {};
+const quantUpdate = document.querySelector(".hidden");
+const overlayInputFields = document.getElementsByClassName("text-field");
+const backDrop = document.querySelector(".backdrop");
+const quantityUpdate = document.querySelector(".quantity-update");
+const modal = document.querySelector(".modal");
+const closeModalBtn = document.querySelector(".exit");
 
 const init = () => {
   displayProducts();
@@ -14,8 +18,39 @@ const init = () => {
     updateStock();
     showMessage("product updated successfully", "success");
   });
+  quantityUpdate.addEventListener("click", () => {
+    show();
+    updateOverlayFields();
+  });
+  quantUpdate.addEventListener("submit", (e) => {
+    e.preventDefault();
+    updateQtyStock();
+    showMessage("quantity updated successfully", "success");
+    removeOverly();
+    clearQtyFields();
+  });
+  closeModalBtn.addEventListener("click", () => {
+    removeOverly();
+    clearQtyFields();
+  });
 };
-
+// const checkIdValidity = (collections, i, obj) => {
+//   let lastProduct = obj.slice(-1)[0];
+//   collections[i].addEventListener("input", () => {
+//     if (
+//       parseInt(collections[i].value) > 0 &&
+//       parseInt(collections[i].value) <= parseInt(lastProduct.id)
+//     ) {
+//       obj.forEach((item) => {
+//         if (collections[i].value == item.id) {
+//           for (let j = i + 1; j <= obj.lenght; j++) {
+//             collections[j].value = 0;
+//           }
+//         }
+//       });
+//     }
+//   });
+// };
 const updateField = () => {
   let itemsFromLocalStorage = Storage.getProducts();
   let lastProduct =
@@ -43,11 +78,10 @@ const updateField = () => {
           `${lastProduct.id}` + " is the last product in stock",
           "error"
         );
-        clearInputFields();
       }
+      clearInputFields();
     }
   });
-  // clearInputFields();
 };
 
 const clearInputFields = () => {
@@ -73,7 +107,7 @@ const updateStock = () => {
         <td>${name}</td>
         <td>${description}</td>
         <td>${category}</td>
-        <td>${quantity}</td>
+        <td class="qty-data">${quantity}</td>
     
     `;
     }
@@ -105,11 +139,80 @@ const PopulateRows = (product) => {
         <td>${product.name}</td>
         <td>${product.description}</td>
         <td>${product.category}</td>
-        <td >${product.quantity}</td>
+        <td class="qty-data" >${product.quantity}</td>
     </tr>
     `;
 };
+const updateOverlayFields = () => {
+  let itemsFromLocalStorage = Storage.getProducts();
+  let idField = overlayInputFields[0];
+  let lastProduct = itemsFromLocalStorage.slice(-1)[0];
+  idField.addEventListener("input", () => {
+    if (
+      parseInt(idField.value) > 0 &&
+      parseInt(idField.value) <= parseInt(lastProduct.id)
+    ) {
+      itemsFromLocalStorage.forEach((item) => {
+        if (idField.value == item.id) {
+          overlayInputFields[1].value = item.name;
+          overlayInputFields[1].readOnly = true;
+          overlayInputFields[2].value = item.quantity;
+        }
+      });
+    } else {
+      if (idField.value == 0) {
+        showMessage("Enter a Valid ID", "error");
+        idField.value = "";
+        clearQtyFields();
+      } else {
+        idField.value = lastProduct.id;
+        clearQtyFields();
 
+        showMessage(
+          `${lastProduct.id}` + " is the last product in stock",
+          "error"
+        );
+      }
+    }
+  });
+};
+
+const clearQtyFields = () => {
+  overlayInputFields[0].value = "";
+  overlayInputFields[1].value = "";
+
+  overlayInputFields[2].value = "";
+};
+const updateQtyStock = () => {
+  let productsFromLocalStorage = Storage.getProducts();
+  const id = parseInt(overlayInputFields[0].value);
+  const quantity = overlayInputFields[2].value.trim();
+  let quantCells = Array.from(document.getElementsByClassName("qty-data"));
+  quantCells.forEach((cell) => {
+    let parentIndex = cell.closest("tr").rowIndex;
+    if (id === parentIndex) {
+      cell.innerHTML = quantity;
+    }
+  });
+  productsFromLocalStorage.forEach((product) => {
+    if (id == product.id) {
+      product.quantity = quantity;
+      localStorage.setItem(
+        "products",
+        JSON.stringify(productsFromLocalStorage)
+      );
+    }
+  });
+};
+
+const show = () => {
+  modal.classList.add("show");
+  backDrop.classList.add("show-backdrop");
+};
+const removeOverly = () => {
+  modal.classList.remove("show");
+  backDrop.classList.remove("show-backdrop");
+};
 const showMessage = (message, state) => {
   let hideTimeout = null;
 
