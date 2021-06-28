@@ -34,23 +34,7 @@ const init = () => {
     clearQtyFields();
   });
 };
-// const checkIdValidity = (collections, i, obj) => {
-//   let lastProduct = obj.slice(-1)[0];
-//   collections[i].addEventListener("input", () => {
-//     if (
-//       parseInt(collections[i].value) > 0 &&
-//       parseInt(collections[i].value) <= parseInt(lastProduct.id)
-//     ) {
-//       obj.forEach((item) => {
-//         if (collections[i].value == item.id) {
-//           for (let j = i + 1; j <= obj.lenght; j++) {
-//             collections[j].value = 0;
-//           }
-//         }
-//       });
-//     }
-//   });
-// };
+
 const updateField = () => {
   let itemsFromLocalStorage = Storage.getProducts();
   let lastProduct =

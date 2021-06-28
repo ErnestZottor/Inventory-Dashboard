@@ -35,11 +35,13 @@ const init = () => {
     let deleteIconArray = [...deleteIcon];
     deleteIconArray.forEach((icon) => {
       icon.addEventListener("click", (e) => {
+        // setTimeout(, 100000);
         DashboardUI.deleteItem(e);
       });
     });
   });
   quantityUpdate.addEventListener("click", () => {
+    DashboardUI.removeDeleteTabel();
     DashboardUI.show();
     DashboardUI.updateField();
   });
@@ -145,11 +147,14 @@ class DashboardUI {
     labelsArray.forEach((label) => {
       let qty = parseInt(label.dataset.label);
       if (qty == 0) {
-        label.classList.add("out-of-stock");
-      } else if (qty <= 20) {
-        label.classList.add("about-out-of-stock");
+        // label.classList.add("out-of-stock");
+        label.classList = "bx bxs-label icon out-of-stock";
+      } else if (qty > 0 && qty <= 20) {
+        // label.classList.add("about-out-of-stock");
+        label.classList = "bx bxs-label icon about-out-of-stock";
       } else {
-        label.classList.add("in-stock");
+        // label.classList.add("in-stock");
+        label.classList = "bx bxs-label icon in-stock";
       }
     });
   }
@@ -251,7 +256,14 @@ class DashboardUI {
     inputFields[1].value = "";
     inputFields[2].value = "";
   };
-
+  static removeDeleteTabel = () => {
+    overViewBoxes.classList.remove("hidden-summary");
+    let actionIconArray = [...actionIcon];
+    actionIconArray.forEach((icon) => {
+      icon.classList = "bx bxs-label icon";
+    });
+    this.displayLabelColor();
+  };
   static updateStock = () => {
     let productsFromLocalStorage = Storage.getProducts();
     const id = parseInt(inputFields[0].value);
